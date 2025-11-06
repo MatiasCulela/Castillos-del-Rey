@@ -26,10 +26,7 @@ Permite gestionar el **alquiler de castillos inflables** para eventos y cumplea�
 
 ---
 
-## 📦 Instalación y ejecución
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/MatiasCulela/Castillos-del-Rey.git
+
 
 ## 👨‍💻 Autor
 **Matías Culela Silva**  
