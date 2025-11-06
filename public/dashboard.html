@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Usuario - Castillo del Rey</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard">
+  <h1>¡Bienvenido/a, <span id="usernameDisplay"></span>!</h1>
+
+  <div class="navbar">
+    <a href="inicio.html">Volver al inicio</a>
+    <a href="reserva.html">Hacer reserva</a>
+    <a href="disponibles.html">Castillos disponibles</a>
+    <a href="mis-reservas.html">Ver mis reservas</a>
+    <button id="logoutBtn">Cerrar sesión</button>
+  </div>
+
+  <script>
+    // Verificar sesión y rol
+    const username = localStorage.getItem("username");
+    const rol = localStorage.getItem("rol");
+
+    if (!username || rol !== "cliente") {
+      alert("No tenés permisos para acceder a esta página.");
+      window.location.href = "/login";
+    } else {
+      document.getElementById("usernameDisplay").textContent = username;
+    }
+
+    // Cerrar sesión
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "/login";
+    });
+
+    // ===================== VER MIS RESERVAS =====================
+    async function mostrarMisReservas() {
+      try {
+        const res = await fetch(`/mis-reservas?username=${username}`);
+        if (!res.ok) throw new Error("Error al obtener reservas");
+        const reservas = await res.json();
+
+        const container = document.getElementById("misReservasContainer");
+        if (!container) return;
+
+        container.innerHTML = "";
+        if (reservas.length === 0) {
+          container.textContent = "No hay reservas para mostrar.";
+          return;
+        }
+
+        const table = document.createElement("table");
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>ID Reserva</th>
+              <th>Castillo</th>
+              <th>Fecha</th>
+              <th>Hora Inicio</th>
+              <th>Hora Fin</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${reservas.map(r => `
+              <tr>
+                <td>${r.id_reserva}</td>
+                <td>${r.nombre_castillo}</td>
+                <td>${r.fecha_reserva}</td>
+                <td>${r.hora_inicio}</td>
+                <td>${r.hora_fin}</td>
+                <td>${r.estado}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        `;
+        container.appendChild(table);
+
+      } catch (error) {
+        console.error(error);
+        alert("Error al cargar tus reservas.");
+      }
+    }
+
+    // Ejecutar solo si hay contenedor
+    if (document.getElementById("misReservasContainer")) {
+      mostrarMisReservas();
+    }
+  </script>
+</body>
+</html>

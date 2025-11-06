@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido | Castillo del Rey</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Body con hero banner */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('img/castillo-fondo.jpg') no-repeat center center/cover;
+      position: relative;
+    }
+
+    /* Overlay difuminado */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7); /* semi-transparente */
+      backdrop-filter: blur(3px);
+      z-index: 0;
+    }
+
+    /* Contenedor centrado */
+    .welcome-container {
+      position: relative;
+      z-index: 1;
+      background-color: white;
+      padding: 40px 50px;
+      border-radius: 25px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .welcome-container:hover {
+      transform: translateY(-5px);
+    }
+
+    .welcome-logo {
+      width: 140px;
+      height: auto;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .btn-ingresar {
+      width: 100%;
+      background-color: blue;
+      color: white;
+      padding: 14px 0;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-ingresar:hover {
+      background-color: #004aad;
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 480px) {
+      .welcome-container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+
+      .btn-ingresar {
+        font-size: 1rem;
+      }
+
+
+    }
+          /* Botón Cerrar Sesión */
+#logoutBtn {
+  position: absolute; /* Para posicionarlo dentro de su contenedor */
+  top: 20px;          /* Distancia desde arriba */
+  right: 20px;        /* Distancia desde la derecha */
+  background-color: #ff4d4f; /* Color rojo */
+  color: white;       /* Texto blanco */
+  border: none;       /* Sin borde */
+  padding: 10px 15px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  font-weight: bold;
+  cursor: pointer;    /* Mano al pasar el mouse */
+  transition: background-color 0.3s; /* Efecto suave */
+}
+
+#logoutBtn:hover {
+  background-color: #ff7875; /* Color al pasar el mouse */
+}
+    
+  </style>
+</head>
+<body>
+
+  <div class="welcome-container">
+    <h1>¡Bienvenido!</h1>
+    <img src="img/logo.png" alt="Logo Castillo del Rey" class="welcome-logo">
+    <p>Gestioná tus reservas de castillos inflables de manera rápida y fácil.</p>
+    <p>Tu diversión comienza aquí!</p>
+    <button class="btn-ingresar" onclick="irAlDashboard()">Ver opción de reservas</button>
+    <button id="logoutBtn">Cerrar sesión</button>
+  </div>
+
+  <script>
+    function irAlDashboard() {
+      window.location.href = "dashboard.html"; // Redirige al dashboard
+    }
+        // Cerrar sesión
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "/login";
+    });
+  </script>
+  
+
+</body>
+</html>

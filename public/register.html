@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Usuario</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <img src="img/logo2.png" alt="Logo del negocio" class="logo" />
+
+  <div class="formulario">
+    <h2>Registro</h2>
+    <form id="registerForm">
+      <!-- Usuario -->
+      <div class="usuario">
+        <label>Nombre de usuario</label>
+        <input type="text" name="username" required />
+      </div>
+
+      <!-- Correo Gmail -->
+      <div class="correo">
+        <label>Correo electrónico (Gmail)</label>
+        <!-- ✅ cambiado 'name="email"' a 'name="correo"' -->
+        <input type="email" name="correo" pattern=".+@gmail\.com" placeholder="ejemplo@gmail.com" required />
+      </div>
+
+      <!-- Contraseña -->
+      <div class="contraseña">
+        <label>Crear Contraseña</label>
+        <input type="password" name="password" required />
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div class="confirmar-contraseña">
+        <label>Confirmar Nueva contraseña</label>
+        <input type="password" name="confirm_password" required />
+      </div>
+
+      <input type="submit" value="Registrarse" />
+
+      <div class="volver">
+        ¿Ya tenés cuenta? <a href="login.html">Iniciar sesión</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="register.js"></script>
+</body>
+</html>

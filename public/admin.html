@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="admin-style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo-container">
+      <img src="img/logo.png" alt="Logo" class="logo">
+    </div>
+    <nav>
+      <ul>
+        <li><button id="navReservas" class="nav-btn active">Reservas</button></li>
+        <li><button id="navCastillos" class="nav-btn">Castillos</button></li>
+        <li><button id="navClientes" class="nav-btn">Clientes</button></li>
+        <li><button id="navEstadisticas" class="nav-btn">Estadísticas</button></li>
+        <li><button id="navHistorial" class="nav-btn">Historial</button></li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="main-content">
+    <!-- BARRA SUPERIOR -->
+    <header class="topbar">
+      <span>Bienvenido, <strong id="usernameDisplay"></strong></span>
+      <button id="btnCerrarSesion" class="btn-secondary">Cerrar sesión</button>
+    </header>
+
+    <!-- SECCIONES -->
+    <!-- RESERVAS -->
+    <section id="sectionReservas" class="section active">
+      <h1>Reservas</h1>
+      <div class="filters">
+        <button id="btnVerPendientes" class="btn-primary">Pendientes</button>
+        <button id="btnVerConfirmadas" class="btn-primary">Confirmadas</button>
+        <button id="btnVerCanceladas" class="btn-primary">Canceladas</button>
+      </div>
+
+      <div class="form-group">
+        <label for="selectCliente"><strong>Seleccionar cliente:</strong></label>
+        <select id="selectCliente">
+          <option value="">-- Seleccione un cliente --</option>
+        </select>
+        <button id="btnVerReservasCliente" class="btn-primary">Ver Reservas</button>
+      </div>
+
+      <div id="reservasContainer" class="scroll-table"></div>
+
+      <h2>Calendario de Reservas Confirmadas</h2>
+      <div id="calendarioContainer"></div>
+    </section>
+
+    <!-- CASTILLOS -->
+    <section id="sectionCastillos" class="section">
+      <h1>Gestión de Castillos</h1>
+      <div id="castillosContainer" class="scroll-table"></div>
+
+      <!-- Modal editar castillo -->
+      <div id="editarCastilloModal" class="modal">
+        <div class="modal-content">
+          <h3>Editar Usuario</h3> <input type="hidden" id="editUserId">
+          <h3>Modificar Castillo</h3>
+          <input type="hidden" id="editId">
+          <div class="form-group">
+            <label>Nombre:</label>
+            <input type="text" id="editNombre">
+          </div>
+          <div class="form-group">
+            <label>Descripción:</label>
+            <input type="text" id="editDescripcion">
+          </div>
+          <div class="form-group">
+            <label>Imagen:</label>
+            <input type="file" id="editImagen" accept="image/*">
+          </div>
+          <div class="form-group">
+            <label>Capacidad:</label>
+            <input type="number" id="editCapacidad">
+          </div>
+          <div class="form-group">
+            <label>Precio:</label>
+            <input type="number" step="0.01" id="editPrecio">
+          </div>
+          <div class="modal-buttons">
+            <button id="btnGuardarCastillo" class="btn-primary">Guardar</button>
+            <button id="btnCancelarEdit" class="btn-secondary">Cancelar</button>
+          </div>
+        </div>
+      </div>
+<!-- FORMULARIO PARA AGREGAR CASTILLO -->
+<h2>Agregar nuevo castillo</h2>
+<form id="formAgregarCastillo" action="/castillos" method="post" enctype="multipart/form-data">
+  <label>Nombre:</label>
+  <input type="text" id="nombreCastillo" name="nombre" required>
+
+  <label>Descripción:</label>
+  <input type="text" id="descripcionCastillo" name="descripcion" required>
+
+  <label>Capacidad:</label>
+  <input type="number" id="capacidadCastillo" name="capacidad" required>
+
+  <label>Precio:</label>
+  <input type="number" id="precioCastillo" name="precio" required step="0.01">
+
+  <label>Foto:</label>
+  <input type="file" id="fotoCastillo" name="foto" accept="image/*" required>
+
+  <button type="submit">Agregar castillo</button>
+</form>
+
+
+<hr>
+
+    </section>
+
+    <!-- CLIENTES -->
+    <section id="sectionClientes" class="section" style="display: none;">
+      <h1>Clientes</h1>
+
+      <!-- Tabla con clientes -->
+      <div id="clientesContainer" class="scroll-table"></div>
+
+      <!-- Botón para crear nuevo usuario -->
+      <div class="form-group" style="margin-top: 20px;">
+        <button id="btnNuevoUsuario" class="btn-primary">Crear nuevo usuario</button>
+      </div>
+
+      <!-- Modal editar usuario -->
+      <div id="editarUsuarioModal" class="modal">
+        <div class="form-group">
+          <label>Nombre de usuario:</label>
+          <input type="text" id="editUsername">
+        </div>
+        <div class="form-group">
+          <label>Contraseña:</label>
+          <input type="password" id="editPassword">
+        </div>    
+        <div class="form-group">
+          <label>Correo:</label>
+          <input type="email" id="editCorreo">
+        </div>
+        <div class="form-group">
+          <label>Rol:</label>
+          <select id="editRol">
+            <option value="admin">Admin</option>
+            <option value="jefe">Jefe</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado:</label>
+          <select id="editActivo">
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+          </select>
+        </div>
+        <div class="modal-buttons">
+          <button id="btnGuardarNuevoUsuario" class="btn-primary">Guardar cambios</button>
+          <button id="btnCancelarUsuario" class="btn-secondary">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Formulario para crear usuario -->
+      <div id="formNuevoUsuario" style="display:none; margin-top:20px;">
+        <h3>Nuevo Usuario</h3>
+        <label>Username:</label>
+        <input type="text" id="nuevoUsername"><br>
+
+        <label>Password:</label>
+        <input type="password" id="nuevoPassword"><br>
+
+        <label>Correo:</label>
+        <input type="email" id="nuevoCorreo"><br>
+
+        <label>Rol:</label>
+        <select id="nuevoRol">
+          <option value="jefe">Jefe</option>
+          <option value="admin">Admin</option>
+        </select><br>
+
+        <label>Estado:</label>
+        <select id="nuevoActivo">
+          <option value="1" selected>Activo</option>
+          <option value="0">Inactivo</option>
+        </select><br><br>
+
+        <button id="btnGuardarUsuario" class="btn-primary">Guardar usuario</button>
+        <button id="btnCancelarUsuario" class="btn-secondary">Cancelar</button>
+      </div>
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <section id="sectionEstadisticas" class="section">
+      <div class="estadisticas-inner">
+        <h1>Estadísticas</h1>
+
+        <div class="chart-container">
+          <h3>Uso de Castillos</h3>
+          <canvas id="chartCastillos"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <h3>Períodos de Mayor Demanda</h3>
+          <canvas id="chartPeriodos"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <h3>Estados de Reservas</h3>
+          <canvas id="chartEstados"></canvas>
+        </div>
+      </div>
+    </section>
+    <!-- HISTORIAL -->
+<section id="sectionHistorial" class="section" style="display: none;">
+  <h1>Historial de Acciones</h1>
+
+  <div class="form-group">
+
+    <!--
+    <label for="selectUsuarioHistorial"><strong>Filtrar por usuario:</strong></label>
+    <select id="selectUsuarioHistorial">
+      <option value="">-- Todos los usuarios --</option>
+    </select>
+    <button id="btnVerHistorial" class="btn-primary">Ver Historial</button>
+  </div>
+-->
+
+  <div id="historialContainer" class="scroll-table"></div>
+</section>
+
+
+    <!-- Modal detalle reserva -->
+    <div id="detalleReservaModal" class="modal">
+      <div class="modal-content">
+        <h3>Detalle de Reserva</h3>
+        <div id="detalleContenido"></div>
+        <button id="btnCerrarDetalle" class="btn-primary">Cerrar</button>
+      </div>
+    </div>
+  </div> <!-- 🔹 cierre correcto de main-content -->
+
+</body>
+</html>
+
+
+
+  <script src="admin.js"></script>
+  <script>
+// Cambio de secciones con sidebar
+const sections = {
+  navReservas: 'sectionReservas',
+  navCastillos: 'sectionCastillos',
+  navClientes: 'sectionClientes',
+  navEstadisticas: 'sectionEstadisticas',
+  navHistorial: 'sectionHistorial' // <-- agregamos la sección de historial
+};
+
+
+    Object.keys(sections).forEach(navId => {
+      document.getElementById(navId).addEventListener('click', () => {
+        // Activar botón
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(navId).classList.add('active');
+        // Mostrar sección
+        document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+        document.getElementById(sections[navId]).style.display = 'block';
+
+        // Cargar estadísticas al mostrar sección
+        if(navId === "navEstadisticas") {
+          if(window.cargarEstadisticas) window.cargarEstadisticas();
+        }
+
+        // Cargar castillos al mostrar sección
+        if(navId === "navCastillos") {
+          if(window.mostrarCastillos) window.mostrarCastillos();
+        }
+      });
+    });
+
+    // Cerrar modal detalle reserva
+    document.getElementById("btnCerrarDetalle").addEventListener("click", () => {
+      document.getElementById("detalleReservaModal").style.display = "none";
+    });
+
+
+  </script>
+</body>
+</html>

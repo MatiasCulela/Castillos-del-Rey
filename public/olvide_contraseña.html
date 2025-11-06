@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar Contraseña</title>
+  <link rel="stylesheet" href="style.css"> <!-- tu CSS principal -->
+</head>
+<body>
+  <div class="formulario">
+    <h2>Recuperar Contraseña</h2>
+
+    <input type="email" id="email" placeholder="Ingresa tu Gmail" required>
+    <button id="enviarBtn">Enviar enlace</button>
+
+      <!-- Contenedor para mensajes -->
+  <div id="mensaje" class="mensaje"></div>
+
+    <div style="margin-top: 15px; text-align: center;">
+      <a href="login.html" style="color: #007bff; text-decoration: none;">Volver a Loguin</a>
+    </div>
+  </div>
+
+  <script>
+const btn = document.getElementById("enviarBtn");
+const mensaje = document.getElementById("mensaje");
+
+btn.addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+
+  try {
+    const res = await fetch("/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    // Mostrar mensaje de éxito
+    mensaje.textContent = data.message;
+    mensaje.classList.remove("error");
+    mensaje.classList.add("exito");
+
+  } catch (err) {
+    console.error(err);
+    // Mostrar mensaje de error
+    mensaje.textContent = "Ocurrió un error. Intentá nuevamente.";
+    mensaje.classList.remove("exito");
+    mensaje.classList.add("error");
+  }
+});
+</script>
+
+</body>
+</html>
+
